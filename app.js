@@ -14,7 +14,7 @@ mongoose
   });
 
 app.get("/", (req, res) => {
-  res.send("Hopefully this works like I expect it to");
+  res.send("Hopefully this works like I expect it to, right");
 });
 
 const PORT = process.env.PORT || 8080;
