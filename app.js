@@ -3,6 +3,10 @@ const mongoose = require("mongoose");
 const { Employee, Department } = require("./models/records");
 
 const app = express();
+const path = require("path");
+
+app.set("views", path.join(__dirname, "views"));
+app.set("view engine", "ejs");
 
 mongoose
   .connect("mongodb://127.0.0.1:27017/recordsData")
