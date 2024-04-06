@@ -12,9 +12,9 @@ const employeeSchema = new Schema(
       type: String,
       required: true,
     },
-    department: { 
-      type: Schema.Types.ObjectId,
-      ref: "Department",
+    department: {
+      type: String,
+      required: true,
     },
   },
   { timestamps: true }

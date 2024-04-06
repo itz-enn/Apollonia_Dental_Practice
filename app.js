@@ -1,6 +1,7 @@
 const express = require("express");
 const mongoose = require("mongoose");
-const { Employee, Department } = require("./models/records");
+const Employee = require("./models/employee");
+const Department = require("./models/department");
 
 const app = express();
 const path = require("path");
@@ -17,8 +18,9 @@ mongoose
     console.log("MONGOOSE NOT CONNECTED");
   });
 
-app.get("/", (req, res) => {
-  res.send("Hopefully this works like I expect it to, right");
+app.get("/employees", async (req, res) => {
+  const employees = await Employee.find({});
+  res.render("index", { employees });
 });
 
 const PORT = process.env.PORT || 8080;
