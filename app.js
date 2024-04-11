@@ -1,13 +1,17 @@
 const express = require("express");
 const mongoose = require("mongoose");
-const Employee = require("./models/employee");
-const Department = require("./models/department");
+const Department = require("./models/dept.model");
+const Employee = require("./models/employee.model");
+const deptRoute = require("./routes/dept.route")
 
 const app = express();
-const path = require("path");
 
-app.set("views", path.join(__dirname, "views"));
-app.set("view engine", "ejs");
+//middlewares
+app.use(express.urlencoded({ extended: true }));
+app.use(express.json());
+
+//routes
+app.use("/api/departments", deptRoute)
 
 mongoose
   .connect("mongodb://127.0.0.1:27017/recordsData")
@@ -17,11 +21,6 @@ mongoose
   .catch(() => {
     console.log("MONGOOSE NOT CONNECTED");
   });
-
-app.get("/employees", async (req, res) => {
-  const employees = await Employee.find({});
-  res.render("index", { employees });
-});
 
 const PORT = process.env.PORT || 8080;
 app.listen(PORT, () => {
