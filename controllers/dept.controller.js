@@ -1,19 +1,20 @@
 const Department = require("../models/dept.model");
 
+console.log(Department);
 //R(all): route to a list of all departments, like an home page
-const getDept = async (req, res) => {
+exports.getDept = async (req, res) => {
   try {
-    const departments = await Department.find({});
+    const depts = await Department.find({});
     res
       .status(200)
-      .json({ status: true, message: "Departments found", departments });
+      .json({ status: true, message: "Departments found", depts });
   } catch (err) {
     res.status(500).json({ status: false, message: err.message });
   }
 };
 
 //R(one): route shows details about individual dept including employees
-const getOneDept = async (req, res) => {
+exports.showDept = async (req, res) => {
   try {
     const { id } = req.params;
     //use populate to get the details of "employees" field in department database
@@ -31,19 +32,19 @@ const getOneDept = async (req, res) => {
 };
 
 //C: route creates a new department using info from body
-const newDept = async (req, res) => {
+exports.newDept = async (req, res) => {
   try {
-    const newDepartment = await Department.create(req.body);
+    const newDept = await Department.create(req.body);
     res
       .status(200)
-      .json({ status: true, message: "Department created successfully", newDepartment});
+      .json({ status: true, message: "Department created successfully", newDept});
   } catch (err) {
     res.status(500).json({ status: false, message: err.message });
   }
 };
 
 //U: route updates info in the collection
-const updateDept = async (req, res) => {
+exports.updateDept = async (req, res) => {
   try {
     const { id } = req.params;
     const dept = await Department.findByIdAndUpdate(id, req.body, {
@@ -66,7 +67,7 @@ const updateDept = async (req, res) => {
 };
 
 //D: route deletes information in the collection
-const deleteDept = async (req, res) => {
+exports.deleteDept = async (req, res) => {
   try {
     const { id } = req.params;
     const dept = await Department.findByIdAndDelete(id);
@@ -82,5 +83,3 @@ const deleteDept = async (req, res) => {
     res.status(500).json({ status: false, message: err.message });
   }
 };
-
-module.exports = { getDept, getOneDept, newDept, updateDept, deleteDept };

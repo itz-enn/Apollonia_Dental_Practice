@@ -23,6 +23,4 @@ const employeeSchema = new Schema(
 //this line creates a model and then a collection
 //with plural small letter word from the schema name
 //i.e collection named "employees"
-const Employee = mongoose.model("Employee", employeeSchema);
-
-module.exports = Employee;
+module.exports = mongoose.model("Employee", employeeSchema);
