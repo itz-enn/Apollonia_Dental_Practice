@@ -1,2 +1,3 @@
 # Apollonia_Dental_Practice
-This CRUD project is inspired by a coursera course using nodejs, mongodb and docker...more details to follow
+This project is inspired by coursera's (Build a CRUD Node.js and MongoDB employee management web-app) course .It was done using nodejs, mongodb, express, react and docker.
+The crud app includes two different models for department data and employee date
