@@ -1,10 +1,12 @@
 const express = require("express");
+const cors = require("cors")
 const mongoose = require("mongoose");
 const dotenv = require("dotenv").config();
 const deptRoute = require("./routes/dept.route");
 const employeeRoute = require("./routes/employee.route");
 
 const app = express();
+app.use(cors( ))
 
 //middlewares
 app.use(express.urlencoded({ extended: true }));
@@ -18,17 +20,12 @@ app.get("/", (req, res) => {
 app.use("/api/departments", deptRoute);
 app.use("/api/employees", employeeRoute);
 
-// /farms/:farm_id/products (post request)
-// /departments/:dept_id/employees
-// app.post("/api/departments/:dept_id/employees", async (req, res) => {
-//   const { id } = req.params;
-//   const dept = await Department.findById(id);
-
-//   const newEmployee = new Employee(req.body);
-//   dept.employees.push(newEmployee)
-//   await dept.save();
-//   await product.save();
-// })
+app.all("*", (req, res, next) => {
+  res.status(404).json({
+    status: "false",
+    message: "Route not found!!!!"
+  })
+})
 
 mongoose
   .connect("mongodb://127.0.0.1:27017/recordsData")

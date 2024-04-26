@@ -1,13 +1,11 @@
 const Department = require("../models/dept.model");
+const Employee = require("../models/employee.model");
 
-console.log(Department);
 //R(all): route to a list of all departments, like an home page
 exports.getDept = async (req, res) => {
   try {
     const depts = await Department.find({});
-    res
-      .status(200)
-      .json({ status: true, message: "Departments found", depts });
+    res.status(200).json({ status: true, message: "Departments found", depts });
   } catch (err) {
     res.status(500).json({ status: false, message: err.message });
   }
@@ -35,9 +33,11 @@ exports.showDept = async (req, res) => {
 exports.newDept = async (req, res) => {
   try {
     const newDept = await Department.create(req.body);
-    res
-      .status(200)
-      .json({ status: true, message: "Department created successfully", newDept});
+    res.status(200).json({
+      status: true,
+      message: "Department created successfully",
+      newDept,
+    });
   } catch (err) {
     res.status(500).json({ status: false, message: err.message });
   }
@@ -74,11 +74,53 @@ exports.deleteDept = async (req, res) => {
     if (!dept) {
       return res
         .status(404)
+        .json({ status: false, message: "No department found" });
+    }
+
+    if (!dept.employees.length) {
+      return res
+        .status(200)
+        .json({ status: true, message: "Department not containing any employee data, deleted successfuly" });
+    } else {
+      // deletes the employees field associated with the department
+      await Employee.deleteMany({ _id: { $in: dept.employees } });
+      return res.status(200).json({
+        status: true,
+        message: "Department and all employee data, deleted successfully",
+      });
+    }
+  } catch (err) {
+    res.status(500).json({ status: false, message: err.message });
+  }
+};
+
+//C: this route adds employee info to department field
+exports.createEmployee = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const dept = await Department.findById(id);
+    if (!dept) {
+      return res
+        .status(404)
         .json({ status: false, message: "department not found" });
     }
-    res
-      .status(200)
-      .json({ status: true, message: "Depatment deleted successfully" });
+
+    const newEmployee = new Employee(req.body);
+    if (newEmployee) {
+      dept.employees.push(newEmployee);
+      await dept.save();
+      await newEmployee.save();
+
+      return res.status(200).json({
+        status: true,
+        message: "employee saved to departments successfully",
+        newEmployee,
+      });
+    } else {
+      return res
+        .status(400)
+        .json({ status: false, message: "new employee not saved" });
+    }
   } catch (err) {
     res.status(500).json({ status: false, message: err.message });
   }

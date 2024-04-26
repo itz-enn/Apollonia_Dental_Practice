@@ -11,8 +11,7 @@ router.put("/:id", deptController.updateDept);
 
 router.delete("/:id", deptController.deleteDept);
 
-// router.post
-// /farms/:farm_id/products (post request)
-// /departments/:dept_id/employees
+//creates an employee instance under the particular department
+router.post("/:id/employees", deptController.createEmployee)
 
 module.exports = router;
